@@ -1,0 +1,19 @@
+mv /nms/shell/tcl8.4.19-src.tar.gz /usr/local/src/tcl8.4.19-src.tar.gz
+mv /nms/shell/expect5.45.tar.gz /usr/local/src/expect5.45.tar.gz
+cd /usr/local/src
+tar -zxvf tcl8.4.19-src.tar.gz
+tar -zxvf expect5.45.tar.gz
+cd tcl8.4.19/unix/
+./configure
+make
+make install
+cd /usr/local/src/expect5.45
+./configure --with-tclinclude=/usr/local/src/tcl8.4.19/generic/ --with-tclconfig=/usr/local/lib/
+make
+make install
+
+/etc/init.d/mysql restart 
+/etc/init.d/redis-server restart
+chmod 777 /nms/shell/interact  
+sh /nms/shell/interact 
+#mysql -u root -p123456 test < /nms/server/utils/backup.sql

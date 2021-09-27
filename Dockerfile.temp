@@ -1,0 +1,10 @@
+FROM ubuntu:latest
+COPY . /nms
+WORKDIR /nms
+COPY package*.json ./
+ENV TZ=Europe/Kiev
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update && apt-get install -y yasm ffmpeg  vim mysql-server nodejs npm redis-server && npm install && mkdir /nonexistent && chmod 777 /nonexistent && chmod 777 /nms/shell/startup && sh /nms/shell/startup 
+
+EXPOSE 1935 8000 3306
+CMD /etc/init.d/mysql restart && /etc/init.d/redis-server restart && node /nms/app.js 
